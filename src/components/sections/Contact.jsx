@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { Mail, MapPin, Send, Terminal } from 'lucide-react';
 import { FaGithub, FaLinkedin } from 'react-icons/fa';
+import { contactData } from '../../data/contactData';
 import './Contact.css';
 import { playAudio } from '../../utils/audioManager';
 
@@ -101,7 +102,7 @@ const Contact = ({ isDark }) => {
       const subject = encodeURIComponent(`Secure Comms from: ${formData.alias}`);
       const body = encodeURIComponent(`SENDER ALIAS: ${formData.alias}\nRETURN ADDRESS: ${formData.address}\n\nPAYLOAD:\n${formData.payload}`);
 
-      window.location.href = `mailto:chanwit.loeyos@gmail.com?subject=${subject}&body=${body}`;
+      window.location.href = `mailto:${contactData.email}?subject=${subject}&body=${body}`;
 
       // Reset form
       setFormData({ alias: '', address: '', payload: '' });
@@ -126,17 +127,20 @@ const Contact = ({ isDark }) => {
             </div>
             <div className="panel-body">
               <p className="contact-intro">
-                &gt; SYSTEM STATUS: READY<br />
-                &gt; Open to internship opportunities and security operations.<br />
-                &gt; Select a node below or initiate secure transmission.
+                {contactData.intro.map((line, idx) => (
+                  <span key={idx}>
+                    {line}
+                    <br />
+                  </span>
+                ))}
               </p>
 
               <div className="nodes-list">
-                <a href="mailto:chanwit.loeyos@gmail.com" className="node-item">
+                <a href={`mailto:${contactData.email}`} className="node-item">
                   <div className="node-icon"><Mail size={20} /></div>
                   <div className="node-info">
                     <span className="node-id">NODE_01 // EMAIL</span>
-                    <span className="node-val">chanwit.loeyos@gmail.com</span>
+                    <span className="node-val">{contactData.email}</span>
                   </div>
                 </a>
 
@@ -144,27 +148,27 @@ const Contact = ({ isDark }) => {
                   <div className="node-icon"><MapPin size={20} /></div>
                   <div className="node-info">
                     <span className="node-id">NODE_02 // LOCATION</span>
-                    <span className="node-val">Bangkok, Thailand</span>
+                    <span className="node-val">{contactData.location}</span>
                   </div>
                 </div>
 
-                <a href="https://github.com/Uchikami" target="_blank" rel="noopener noreferrer" className="node-item" onClick={() => {
+                <a href={contactData.github.url} target="_blank" rel="noopener noreferrer" className="node-item" onClick={() => {
                   if (isDark) playAudio('/assets/sound/comm_btn.mp3', 0.5);
                 }}>
                   <div className="node-icon"><FaGithub size={20} /></div>
                   <div className="node-info">
                     <span className="node-id">NODE_03 // GITHUB</span>
-                    <span className="node-val">/Uchikami</span>
+                    <span className="node-val">{contactData.github.handle}</span>
                   </div>
                 </a>
 
-                <a href="https://www.linkedin.com/in/chanwit-loeyos-b54a202a0/" target="_blank" rel="noopener noreferrer" className="node-item" onClick={() => {
+                <a href={contactData.linkedin.url} target="_blank" rel="noopener noreferrer" className="node-item" onClick={() => {
                   if (isDark) playAudio('/assets/sound/comm_btn.mp3', 0.5);
                 }}>
                   <div className="node-icon"><FaLinkedin size={20} /></div>
                   <div className="node-info">
                     <span className="node-id">NODE_04 // LINKEDIN</span>
-                    <span className="node-val">/in/chanwit-loeyos</span>
+                    <span className="node-val">{contactData.linkedin.handle}</span>
                   </div>
                 </a>
               </div>

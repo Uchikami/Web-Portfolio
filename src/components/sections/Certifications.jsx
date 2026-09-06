@@ -1,16 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
+import { certificationsData as certifications } from '../../data/certificationsData';
 import './Certifications.css';
-
-const certifications = [
-  {
-    id: 1,
-    name: 'Cyber Security 101 (SEC1)',
-    issuer: 'TRY HACK ME',
-    date: '2026',
-    image: '/certs/Cyber Security 101 (SEC1) Certificate.jpg',
-    link: 'https://assets.tryhackme.com/certification-certificate/69974832a981bfe768a733a4.pdf'
-  }
-];
 
 const ScrambleText = ({ targetText, isHovered, delay = 0 }) => {
   const [text, setText] = useState('');

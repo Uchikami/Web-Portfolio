@@ -1,73 +1,15 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
+import { skillsData, normalizeSkills } from '../../data/skillsData';
 import './Skills.css';
 
-const skillData = [
-  {
-    category: 'Offensive Security',
-    items: [
-      { name: 'Kali Linux', level: 'Intermediate' },
-      { name: 'Web Penetration Testing', level: 'Beginner' },
-      { name: 'Privilege Escalation', level: 'Beginner' },
-      { name: 'Gobuster', level: 'Beginner' },
-    ],
-  },
-  {
-    category: 'Network & Defense',
-    items: [
-      { name: 'Wireshark', level: 'Beginner' },
-      { name: 'Nmap', level: 'Intermediate' },
-      { name: 'Burpsuite', level: 'Beginner' },
-      { name: 'Nessus', level: 'Beginner' },
-    ],
-  },
-  {
-    category: 'Development & AI',
-    items: [
-      { name: 'Python', level: 'Intermediate' },
-      { name: 'JavaScript / React', level: 'Intermediate' },
-      { name: 'VSCode', level: 'Intermediate' },
-    ],
-  },
-  {
-    category: 'Audio & Media Production',
-    items: [
-      { name: 'Izotope RX 12', level: 'Intermediate' },
-      { name: 'DaVinci Fairlight', level: 'Advanced' },
-      { name: 'Film Sound Post-Production', level: 'Advanced' },
-      { name: 'Film Sound On Set', level: 'Intermediate' },
-    ],
-  },
-  {
-    category: 'Language',
-    items: [
-      { name: 'Thai', level: 'Native' },
-      { name: 'English (B1 SPEXX)', level: 'Intermediate' },
-    ],
-  },
-  {
-    category: 'Soft Skills',
-    items: [
-      { name: 'Problem Solving' },
-      { name: 'Critical Thinking' },
-      { name: 'Teamwork' },
-      { name: 'Planning' },
-      { name: 'Communication' },
-      { name: 'Persistence' },
-    ],
-  },
-];
-
-// Pre-calculate flat data indices for waterfall animation
-let currentIndex = 0;
-const processedSkillData = skillData.map(group => {
-  return {
-    ...group,
-    items: group.items.map(skill => {
-      return { ...skill, globalIndex: currentIndex++ };
-    })
-  };
-});
-const totalSkills = currentIndex;
+const getBadgeClass = (level) => {
+  if (!level) return '';
+  const l = level.toLowerCase();
+  if (l.includes('native') || l.includes('advanced')) return 'ts-advanced';
+  if (l.includes('intermediate') || l.includes('b1')) return 'ts-intermediate';
+  if (l.includes('beginner')) return 'ts-beginner';
+  return 'ts-intermediate';
+};
 
 const SkillItem = ({ skill, isDark, isRevealed }) => {
   const [displayText, setDisplayText] = useState(skill.name);
@@ -193,12 +135,20 @@ const SkillItem = ({ skill, isDark, isRevealed }) => {
       <span className={`ts-name ${isHovered && isDark && !isSecured && !isBreaking ? 'ts-name-glitch' : ''}`}>
         {displayText}
       </span>
-      {isDark && <span className="ts-dots"></span>}
-      <span className={`ts-badge ${isHovered && isDark && !isSecured && !isBreaking ? 'ts-glitch' : ''}`}>
+      <span className="ts-dots"></span>
+      <span
+        className={`ts-badge ${getBadgeClass(skill.level)} ${
+          isHovered && isDark && !isSecured && !isBreaking ? 'ts-glitch' : ''
+        }`}
+      >
         {isBreaking ? (
           <span className="badge-secured-anim">[PATCHED]</span>
         ) : isHovered && isDark && !isSecured ? (
           '[VULNERABLE]'
+        ) : isSecured && isDark ? (
+          <span className="badge-secured-anim">[PATCHED]</span>
+        ) : skill.level ? (
+          skill.level
         ) : null}
       </span>
     </div>
@@ -209,6 +159,8 @@ const Skills = ({ isDark }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [revealedCount, setRevealedCount] = useState(0);
   const sectionRef = useRef(null);
+
+  const { processedData, totalSkills } = useMemo(() => normalizeSkills(skillsData), []);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -248,7 +200,7 @@ const Skills = ({ isDark }) => {
     } else {
       setRevealedCount(totalSkills); // Show all instantly in light mode or when initially loading
     }
-  }, [isVisible, isDark]);
+  }, [isVisible, isDark, totalSkills]);
 
   return (
     <section id="skills" className="skills-section" ref={sectionRef}>
@@ -260,7 +212,7 @@ const Skills = ({ isDark }) => {
         </div>
 
         <div className="skills-grid">
-          {processedSkillData.map((group, i) => (
+          {processedData.map((group, i) => (
             <div
               key={i}
               className="skills-group card"
