@@ -1,9 +1,11 @@
 import { GraduationCap } from 'lucide-react';
 import { aboutData } from '../../data/aboutData';
+import { educationData } from '../../data/educationData';
 import './About.css';
 
 const About = ({ isDark }) => {
-  const { hackerBio, dossier, education, scrollingLogs } = aboutData;
+  const { hackerBio, dossier, scrollingLogs } = aboutData;
+  const education = educationData;
 
   return (
     <section id="about" style={{ position: 'relative', overflow: 'hidden' }}>

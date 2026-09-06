@@ -1,10 +1,13 @@
 /**
  * =========================================================================
- * ABOUT & EDUCATION CONFIGURATION DATA
+ * ABOUT CONFIGURATION DATA
  * =========================================================================
- * Easily edit your bio, origin story, objective, and education history here!
+ * Easily edit your bio, origin story, objective, and dossier highlights here!
+ * For education milestones (degrees, GPA, schools), see educationData.js!
  * =========================================================================
  */
+
+import { educationData } from './educationData';
 
 export const aboutData = {
   // Bio paragraphs (used in Hacker Mode)
@@ -38,21 +41,8 @@ export const aboutData = {
     },
   ],
 
-  // Education Timeline History
-  education: [
-    {
-      degree: 'Science-Mathematics',
-      school: 'Pua School',
-      period: '2020 - 2023',
-      detail: 'GPA: 3.32',
-    },
-    {
-      degree: 'B.S. in Computer Science',
-      school: 'Bangkok University (School of Information Technology and Innovation)',
-      period: '2023 - Present (Expected Graduation: 2027)',
-      detail: 'Current GPA: 3.91',
-    },
-  ],
+  // Education Timeline History (linked from educationData.js)
+  education: educationData,
 
   // Background Terminal Logs (Hacker Mode decorative terminal stream)
   scrollingLogs: [
@@ -68,4 +58,5 @@ export const aboutData = {
   ],
 };
 
+export { educationData };
 export default aboutData;
